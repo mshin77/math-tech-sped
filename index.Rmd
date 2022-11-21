@@ -22,11 +22,10 @@ This webpage contains R codes and figures from Authors (2022). The entire datase
 
 ## Import {.tabset}
 
-### 1. Import a .xlsx file
+### 1. Import a .csv file
 ```{r}
 suppressPackageStartupMessages({
     library(tidyverse)
-    library(readxl)
     library(tidytext)
     library(quanteda.textstats)
     library(stm)
@@ -43,7 +42,7 @@ suppressPackageStartupMessages({
     library(plotly)
 })
 
-raw_tbl <- read_excel("data/raw_data_xl.xlsx")
+raw_tbl <- read.csv("data/raw_data.csv")
 
 raw_tbl_period <- raw_tbl %>% mutate(period = dplyr::case_when(
     year >=1980 & year <= 1989 ~ "1980_to_1989",
