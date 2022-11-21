@@ -23,7 +23,6 @@ This webpage contains R codes and figures from Authors (2022). The entire datase
 ## Import {.tabset}
 
 ### 1. Import a .xlsx file
-
 ```{r}
 suppressPackageStartupMessages({
     library(tidyverse)
@@ -101,12 +100,12 @@ dfm_2
 
 ## Structural topic modeling {.tabset}
 
-### 1. Modeling 
-
-#### Convert quanteda objects to stm package format.
-```{r}
+### 1. Modeling
+```{r fig.align="center", fig.width=50, fig.height=20}
 out <- convert(dfm_2, to = "stm")
 
+# library(stm)
+# 
 # set.seed(1234)
 # K_search <- searchK(out$documents,
 #                     out$vocab,
@@ -119,9 +118,40 @@ out <- convert(dfm_2, to = "stm")
 #                         I((year >= 1990)*(year - 1990)) +
 #                         I((year >= 2000)*(year - 2000)) +
 #                         I((year >= 2010)*(year - 2010)),
-#                     verbose = FALSE)
+#                     verbose = TRUE)
 
-# K_search %>% plot.searchK()
+# # from stm https://github.com/bstewart/stm
+# plot.searchK <-function(x, ...){
+#   oldpar <- par(no.readonly=TRUE)
+#   g <- x$results
+#   par(mfrow=c(2,2),mar=c(2,2,2,2),oma=c(0,0,2,0), cex=3.5)
+# 
+#   plot(g$K,g$heldout,type="p", main="Held-out likelihood", xlab="", ylab="")
+#   lines(g$K,g$heldout,lty=2,col=2)
+# 
+#   plot(g$K,g$residual,type="p", main="Residuals", xlab="", ylab="")
+#   lines(g$K,g$residual,lty=2,col=2 )
+# 
+#   if(!is.null(g$semcoh)){
+#     plot(g$K,g$semcoh,type="p", main="Semantic coherence", xlab="", ylab="")
+#     lines(g$K,g$semcoh,lty=2,col=2 )
+#   }
+# 
+#   plot(g$K,g$lbound,type="p", main="Lower bound", xlab="", ylab="")
+#   lines(g$K,g$lbound,lty=2,col=2 )
+# 
+#   par(oldpar)
+# }
+
+# plot(K_search_plot)
+
+knitr::include_graphics("figures/K_search.png")
+```
+
+
+### 2. Estimated effects
+```{r}
+#### Convert quanteda objects to stm package format.
 
 set.seed(1234)
 stm_15 <- stm(out$documents,
@@ -137,12 +167,7 @@ stm_15 <- stm(out$documents,
               K = 15,
               verbose = FALSE)
 
-stm_15
-```
-
-
-#### Model estimated effects.
-```{r}
+# Model estimated effects.
 set.seed(1234)
 effect_stm_15 <- estimateEffect(1:15 ~ 
                                     I((year >= 1980)*(year - 1980)) +
@@ -179,14 +204,20 @@ names(labeled_topic_list) <- c(1,2,3,4,5,6,7,8,9,10,11,12,13,14, 15)
 
 effect_stm_15_td <- effect_stm_15_td %>% 
     mutate(topic_label = as.factor(labeled_topic_list[effect_stm_15_td$topic])) %>%
-    dplyr::select(topic, topic_label, term, estimate, std.error, statistic, p.value)
+    dplyr::select(topic, topic_label, term, estimate, std.error, statistic, p.value) %>%
+    mutate(estimate = weights::rd(estimate, add=FALSE, digits = 3)) %>%
+    mutate(std.error = weights::rd(std.error, add=FALSE, digits = 3)) %>%
+    mutate(statistic = weights::rd(statistic, add=FALSE, digits = 3)) %>%
+    mutate(p.value = weights::rd(p.value, add=FALSE, digits = 3)) 
 
-paged_table(effect_stm_15_td)
+DT::datatable(effect_stm_15_td) 
 ```
 
 
-#### Tidy the word-topic combinations (per-topic-per-term probabilities).
+### 3. Results
 ```{r}
+#### Tidy the word-topic combinations (per-topic-per-term probabilities).
+
 united_tbl <- read_excel("data/united_tbl.xlsx")
 
 stm_15$vocab <- dplyr::case_when(
@@ -263,13 +294,6 @@ beta_td <- beta_td %>%
     mutate(topic_label = as.factor(labeled_topic_list[beta_td$topic])) %>% 
     dplyr::select(topic, topic_label, term, beta)
 
-paged_table(beta_td)
-```
-
-
-### 2. Results
-
-```{r}
 beta_td_selected <- beta_td %>%
     group_by(topic_label) %>%
     top_n(10, beta) %>%
@@ -388,15 +412,12 @@ theta_td_mean_cor_beta_selected$Topics <- paste(theta_td_mean_cor_beta_selected$
 theta_td_mean_cor_beta_selected_update <- theta_td_mean_cor_beta_selected %>%
     select(Terms, Topics, r, p)
 
-theta_td_mean_cor_beta_selected_update_td <- knitr::kable(theta_td_mean_cor_beta_selected_update, col.names = c("Terms", "Topics", "$r$", "$p$")) 
-
-theta_td_mean_cor_beta_selected_update_td
+DT::datatable(theta_td_mean_cor_beta_selected_update)
 ```
 
 
 
-### 3. Distribution of topic probability
-
+### 4. Topic distribution 
 ```{r fig.align="center", fig.width = 8, fig.height= 8}
 theta_td$period <- dplyr::case_when(
     theta_td$period == "1980_to_1989" ~ "1980 to 1989",
@@ -436,8 +457,7 @@ topic_by_prevalence_publication
 ```
 
 
-### 4. Topic proportion by year
-
+### 5. Topic proportion by year
 ```{r fig.align="center", fig.width = 8, fig.height= 8}
 effects_year <- get_effects(estimates = effect_stm_15,
                             variable = 'year',
@@ -476,8 +496,11 @@ year_plot
 
 ## Word network analysis {.tabset}
 
+### 1. 1980 to 1989
+```{r fig.align="center", fig.width = 6, fig.height= 7}
+
 #### Replace character vectors
-```{r}
+
 dfm_2@Dimnames$features <- dplyr::case_when(
     
     dfm_2@Dimnames$features == "aac" ~ "AAC",
@@ -549,11 +572,7 @@ dfm_2_td <- tidy(dfm_2)
 
 dfm_gamma <- dfm_2_td %>%
     left_join(y = theta_td, by = c("document" = "document"))
-```
 
-
-### 1. 1980 to 1989.
-```{r fig.align="center", fig.width = 6, fig.height= 7}
 word_co_by_1989 <- dfm_gamma %>%
     filter(year >=1980 & year <= 1989) %>%
     pairwise_count(term, study_number, sort = TRUE) 
@@ -586,7 +605,7 @@ network_1989
 ```
 
 
-### 2. 1990 to 1999.
+### 2. 1990 to 1999
 ```{r fig.align="center", fig.width = 6, fig.height= 7}
 word_co_by_1999 <- dfm_gamma %>%
     filter(year >=1990 & year <= 1999) %>%
@@ -620,7 +639,7 @@ network_1999
 ```
 
 
-### 3. 2000 to 2009.
+### 3. 2000 to 2009
 ```{r fig.align="center", fig.width = 6, fig.height= 10}
 word_co_by_2009 <- dfm_gamma %>%
     filter(year >=2000 & year <= 2009) %>%
@@ -653,7 +672,7 @@ network_2009
 ```
 
 
-### 4. 2010 to 2021.
+### 4. 2010 to 2021
 ```{r fig.align="center", fig.width = 6, fig.height= 7}
 word_co_by_2021 <- dfm_gamma %>%
     filter(year >=2010 & year <= 2021) %>%
@@ -689,9 +708,10 @@ network_2021
 
 ## Total number of publications {.tabset}
 
+```{r fig.align="center", fig.width = 10, fig.height= 6}
+
 #### Number of publications over time
 
-```{r fig.align="center", fig.width = 10, fig.height= 6}
 year_doc_counts_all <- united_tbl %>%
   group_by(year) %>%
   summarize(publication_number = n()) %>%
