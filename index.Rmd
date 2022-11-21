@@ -217,7 +217,7 @@ DT::datatable(effect_stm_15_td)
 ```{r}
 #### Tidy the word-topic combinations (per-topic-per-term probabilities).
 
-united_tbl <- read_excel("data/united_tbl.xlsx")
+united_tbl <- read.csv("data/united_tbl.csv")
 
 stm_15$vocab <- dplyr::case_when(
     stm_15$vocab == "aac" ~ "AAC",
@@ -429,7 +429,7 @@ theta_td$period <- dplyr::case_when(
 
 topic_by_prevalence_publication <- theta_td %>%
     ggplot(aes(study_number, theta, color = as.factor(period))) +
-    geom_line(show.legend = TRUE, size = 0.3) +
+    geom_line(show.legend = TRUE, linewidth = 0.3) +
     lemon::facet_rep_wrap(~ topic_label, repeat.tick.labels = FALSE, ncol = 3) +
     labs(x = "Publications",
         y = expression("Topic proportion" ~ (theta)),
@@ -439,8 +439,8 @@ topic_by_prevalence_publication <- theta_td %>%
     theme_minimal(base_size = 11) +
     theme(panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          axis.line = element_line(color = "#3B3B3B", size = 0.3),
-          axis.ticks = element_line(color = "#3B3B3B", size = 0.3),
+          axis.line = element_line(color = "#3B3B3B", linewidth = 0.3),
+          axis.ticks = element_line(color = "#3B3B3B", linewidth = 0.3),
           strip.text.x = element_text(size = 11, color = "#3B3B3B"), 
           axis.text.x = element_text(size = 11, color = "#3B3B3B"),
           axis.text.y = element_text(size = 11, color = "#3B3B3B"),
@@ -473,15 +473,15 @@ year_plot <- effects_year %>%
     ggplot(aes(x = year, y = proportion)) +
     facet_wrap(~ topic_label, ncol = 3, scales = "free") +
     scale_y_continuous(labels = numform::ff_num(zero = 0, digits = 3)) +
-    geom_line(color = "#3B3B3B", size = 0.3) +
+    geom_line(color = "#3B3B3B", linewidth = 0.3) +
     xlab('Publication year') + 
     ylab(expression("Topic proportion" ~ (theta))) +
     theme_minimal(base_size = 11) +
     theme(
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
-          axis.line = element_line(color = "#3B3B3B", size = 0.3),
-          axis.ticks = element_line(color = "#3B3B3B", size = 0.3),
+          axis.line = element_line(color = "#3B3B3B", linewidth = 0.3),
+          axis.ticks = element_line(color = "#3B3B3B", linewidth = 0.3),
           strip.text.x = element_text(size = 11, color = "#3B3B3B"), 
           axis.text.x = element_text(size = 11, color = "#3B3B3B"),
           axis.text.y = element_text(size = 11, color = "#3B3B3B"),
@@ -707,7 +707,7 @@ network_2021
 
 ## Total number of publications {.tabset}
 
-```{r fig.align="center", fig.width = 10, fig.height= 6}
+```{r fig.align="center", fig.width = 8, fig.height= 4}
 
 #### Number of publications over time
 
@@ -721,7 +721,7 @@ plot_year_doc_counts <- year_doc_counts_all %>%
   geom_col(fill = "#979797") + 
     theme_classic() +
     theme(
-        axis.line = element_line(color = "#3B3B3B", size = 0.2),
+        axis.line = element_line(color = "#3B3B3B", linewidth = 0.2),
         axis.title = element_text(size = 11, color = "#3B3B3B"),
         axis.title.x = element_text(margin = margin(t = 10), color = "#3B3B3B"),
         axis.title.y = element_text(margin = margin(r = 10), color = "#3B3B3B")) +
