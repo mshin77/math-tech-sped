@@ -496,7 +496,7 @@ year_plot
 ## Word network analysis {.tabset}
 
 ### 1. 1980 to 1989
-```{r fig.align="center", fig.width = 6, fig.height= 7}
+```{r fig.align="center", fig.width = 5, fig.height= 6}
 
 #### Replace character vectors
 
@@ -605,7 +605,7 @@ network_1989
 
 
 ### 2. 1990 to 1999
-```{r fig.align="center", fig.width = 6, fig.height= 7}
+```{r fig.align="center", fig.width = 5, fig.height= 6}
 word_co_by_1999 <- dfm_gamma %>%
     filter(year >=1990 & year <= 1999) %>%
     pairwise_count(term, study_number, sort = TRUE) 
@@ -639,7 +639,7 @@ network_1999
 
 
 ### 3. 2000 to 2009
-```{r fig.align="center", fig.width = 6, fig.height= 10}
+```{r fig.align="center", fig.width = 7, fig.height= 8}
 word_co_by_2009 <- dfm_gamma %>%
     filter(year >=2000 & year <= 2009) %>%
     pairwise_count(term, study_number, sort = TRUE) 
@@ -672,7 +672,7 @@ network_2009
 
 
 ### 4. 2010 to 2021
-```{r fig.align="center", fig.width = 6, fig.height= 7}
+```{r fig.align="center", fig.width = 6, fig.height= 8}
 word_co_by_2021 <- dfm_gamma %>%
     filter(year >=2010 & year <= 2021) %>%
     pairwise_count(term, study_number, sort = TRUE) 
