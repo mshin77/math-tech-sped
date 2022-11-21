@@ -639,7 +639,7 @@ network_1999
 
 
 ### 3. 2000 to 2009
-```{r fig.align="center", fig.width = 7, fig.height= 8}
+```{r fig.align="center", fig.width = 8, fig.height= 7}
 word_co_by_2009 <- dfm_gamma %>%
     filter(year >=2000 & year <= 2009) %>%
     pairwise_count(term, study_number, sort = TRUE) 
@@ -672,7 +672,7 @@ network_2009
 
 
 ### 4. 2010 to 2021
-```{r fig.align="center", fig.width = 6, fig.height= 8}
+```{r fig.align="center", fig.width = 8, fig.height= 7}
 word_co_by_2021 <- dfm_gamma %>%
     filter(year >=2010 & year <= 2021) %>%
     pairwise_count(term, study_number, sort = TRUE) 
