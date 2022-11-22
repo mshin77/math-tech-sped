@@ -22,10 +22,11 @@ This webpage contains R codes and figures from Authors (2022). The entire datase
 
 ## Import {.tabset}
 
-### 1. Import a .csv file
+### 1. Import a .xlsx file
 ```{r}
 suppressPackageStartupMessages({
     library(tidyverse)
+    library(readxl)
     library(tidytext)
     library(quanteda.textstats)
     library(stm)
@@ -42,7 +43,7 @@ suppressPackageStartupMessages({
     library(plotly)
 })
 
-raw_tbl <- read.csv("data/raw_data.csv")
+raw_tbl <- read_excel("data/raw_data_xl.xlsx")
 
 raw_tbl_period <- raw_tbl %>% mutate(period = dplyr::case_when(
     year >=1980 & year <= 1989 ~ "1980_to_1989",
@@ -217,7 +218,7 @@ DT::datatable(effect_stm_15_td)
 ```{r}
 #### Tidy the word-topic combinations (per-topic-per-term probabilities).
 
-united_tbl <- read.csv("data/united_tbl.csv")
+united_tbl <- read_excel("data/united_tbl.xlsx")
 
 stm_15$vocab <- dplyr::case_when(
     stm_15$vocab == "aac" ~ "AAC",
@@ -382,9 +383,82 @@ cor_topic_clean <- cor_topic %>%
 
 cor_topic_clean$r <- paste0(cor_topic_clean$r, cor_topic_clean$p.sig)
 
+#### Replace character vectors
+
+dfm_2@Dimnames$features <- dplyr::case_when(
+    
+    dfm_2@Dimnames$features == "aac" ~ "AAC",
+    dfm_2@Dimnames$features == "adhd" ~ "ADHD",
+    dfm_2@Dimnames$features == "asd" ~ "ASD",
+    dfm_2@Dimnames$features == "assistive_technology" ~ "assistive technology",
+    dfm_2@Dimnames$features == "baip" ~ "BAIP",
+    dfm_2@Dimnames$features == "basic_skill" ~ "basic skill",
+    dfm_2@Dimnames$features == "blended_learning" ~ "blended learning",
+    dfm_2@Dimnames$features == "bmt" ~ "BMT",
+    dfm_2@Dimnames$features == "cai" ~ "CAI",
+    dfm_2@Dimnames$features == "cbm" ~ "CBM",
+    dfm_2@Dimnames$features == "ccss" ~ "CCSS",
+    dfm_2@Dimnames$features == "concrete_manipulatives" ~ "concrete manipulatives",
+    dfm_2@Dimnames$features == "cra" ~ "CRA",
+    dfm_2@Dimnames$features == "digital_text" ~ "digital text", 
+    dfm_2@Dimnames$features == "drill_practice" ~ "drill and practice",
+    dfm_2@Dimnames$features == "eai" ~ "EAI",
+    dfm_2@Dimnames$features == "ebd" ~ "EBD",
+    dfm_2@Dimnames$features == "ebp" ~ "EBP",
+    dfm_2@Dimnames$features == "eworkbook" ~ "eWorkbook",
+    dfm_2@Dimnames$features == "explicit_instruction" ~ "explicit instruction",
+    dfm_2@Dimnames$features == "functional_relation" ~ "functional relation",
+    dfm_2@Dimnames$features == "fxs" ~ "FXS",
+    dfm_2@Dimnames$features == "graphing_calculator" ~ "graphing calculator",
+    dfm_2@Dimnames$features == "high_school" ~ "high school",
+    dfm_2@Dimnames$features == "ict" ~ "ICT",
+    dfm_2@Dimnames$features == "instructional_sequence" ~ "instructional sequence",
+    dfm_2@Dimnames$features == "intellectual_disability" ~ "intellectual disability",
+    dfm_2@Dimnames$features == "ipad" ~ "iPad",
+    dfm_2@Dimnames$features == "ipod" ~ "iPod",
+    dfm_2@Dimnames$features == "kindle" ~ "Kindle",
+    dfm_2@Dimnames$features == "learning_disability" ~ "learning disability",
+    dfm_2@Dimnames$features == "learning_disabled" ~ "learning disabled",
+    dfm_2@Dimnames$features == "mathematics_disability" ~ "mathematics disability",
+    dfm_2@Dimnames$features == "mathematics_skill" ~ "mathematics skill",
+    dfm_2@Dimnames$features == "middle_school" ~ "middle school",
+    dfm_2@Dimnames$features == "mld" ~ "MLD",
+    dfm_2@Dimnames$features == "more" ~ "MORE",
+    dfm_2@Dimnames$features == "multiple_baseline" ~ "multiple baseline",
+    dfm_2@Dimnames$features == "multiple_probe" ~ "multiple probe",
+    dfm_2@Dimnames$features == "multiplication_fact" ~ "multiplication fact",
+    dfm_2@Dimnames$features == "oer" ~ "OER",
+    dfm_2@Dimnames$features == "paper_pencil" ~ "paper and pencil",
+    dfm_2@Dimnames$features == "problem_solving" ~ "problem solving",
+    dfm_2@Dimnames$features == "rti" ~ "RtI",
+    dfm_2@Dimnames$features == "sbi" ~ "SBI",
+    dfm_2@Dimnames$features == "secondary_student" ~ "secondary student",
+    dfm_2@Dimnames$features == "self_monitoring" ~ "self-monitoring",
+    dfm_2@Dimnames$features == "single_case" ~ "single case",
+    dfm_2@Dimnames$features == "single_subject" ~ "single subject",
+    dfm_2@Dimnames$features == "speech_generating" ~ "speech generating", 
+    dfm_2@Dimnames$features == "stem" ~ "STEM",
+    dfm_2@Dimnames$features == "udl" ~ "UDL",
+    dfm_2@Dimnames$features == "video_modeling" ~ "video modeling",
+    dfm_2@Dimnames$features == "video_prompting" ~ "video prompting",
+    dfm_2@Dimnames$features == "virtual_abstract" ~ "virtual-abstract",
+    dfm_2@Dimnames$features == "virtual_manipulatives" ~ "virtual manipulatives",
+    dfm_2@Dimnames$features == "visual_impairment" ~ "visual impairment",
+    dfm_2@Dimnames$features == "visually_impaired" ~ "visually impaired",
+    dfm_2@Dimnames$features == "vra" ~ "VRA",
+    dfm_2@Dimnames$features == "word_problem" ~ "word problem",
+    
+    TRUE ~ as.character(dfm_2@Dimnames$features)
+)
+
+dfm_2_td <- tidy(dfm_2)
+
 # Merge data tables.
 
 theta_td$document <- as.character(theta_td$document)
+
+dfm_gamma <- dfm_2_td %>%
+    left_join(y = theta_td, by = c("document" = "document"))
 
 theta_td_mean_cor <- cor_topic_clean %>%
     left_join(y = theta_td_mean, by = c("labeled_topic_group" = "topic_label")) %>%
@@ -496,81 +570,7 @@ year_plot
 ## Word network analysis {.tabset}
 
 ### 1. 1980 to 1989
-```{r fig.align="center", fig.width = 5, fig.height= 6}
-
-#### Replace character vectors
-
-dfm_2@Dimnames$features <- dplyr::case_when(
-    
-    dfm_2@Dimnames$features == "aac" ~ "AAC",
-    dfm_2@Dimnames$features == "adhd" ~ "ADHD",
-    dfm_2@Dimnames$features == "asd" ~ "ASD",
-    dfm_2@Dimnames$features == "assistive_technology" ~ "assistive technology",
-    dfm_2@Dimnames$features == "baip" ~ "BAIP",
-    dfm_2@Dimnames$features == "basic_skill" ~ "basic skill",
-    dfm_2@Dimnames$features == "blended_learning" ~ "blended learning",
-    dfm_2@Dimnames$features == "bmt" ~ "BMT",
-    dfm_2@Dimnames$features == "cai" ~ "CAI",
-    dfm_2@Dimnames$features == "cbm" ~ "CBM",
-    dfm_2@Dimnames$features == "ccss" ~ "CCSS",
-    dfm_2@Dimnames$features == "concrete_manipulatives" ~ "concrete manipulatives",
-    dfm_2@Dimnames$features == "cra" ~ "CRA",
-    dfm_2@Dimnames$features == "digital_text" ~ "digital text", 
-    dfm_2@Dimnames$features == "drill_practice" ~ "drill and practice",
-    dfm_2@Dimnames$features == "eai" ~ "EAI",
-    dfm_2@Dimnames$features == "ebd" ~ "EBD",
-    dfm_2@Dimnames$features == "ebp" ~ "EBP",
-    dfm_2@Dimnames$features == "eworkbook" ~ "eWorkbook",
-    dfm_2@Dimnames$features == "explicit_instruction" ~ "explicit instruction",
-    dfm_2@Dimnames$features == "functional_relation" ~ "functional relation",
-    dfm_2@Dimnames$features == "fxs" ~ "FXS",
-    dfm_2@Dimnames$features == "graphing_calculator" ~ "graphing calculator",
-    dfm_2@Dimnames$features == "high_school" ~ "high school",
-    dfm_2@Dimnames$features == "ict" ~ "ICT",
-    dfm_2@Dimnames$features == "instructional_sequence" ~ "instructional sequence",
-    dfm_2@Dimnames$features == "intellectual_disability" ~ "intellectual disability",
-    dfm_2@Dimnames$features == "ipad" ~ "iPad",
-    dfm_2@Dimnames$features == "ipod" ~ "iPod",
-    dfm_2@Dimnames$features == "kindle" ~ "Kindle",
-    dfm_2@Dimnames$features == "learning_disability" ~ "learning disability",
-    dfm_2@Dimnames$features == "learning_disabled" ~ "learning disabled",
-    dfm_2@Dimnames$features == "mathematics_disability" ~ "mathematics disability",
-    dfm_2@Dimnames$features == "mathematics_skill" ~ "mathematics skill",
-    dfm_2@Dimnames$features == "middle_school" ~ "middle school",
-    dfm_2@Dimnames$features == "mld" ~ "MLD",
-    dfm_2@Dimnames$features == "more" ~ "MORE",
-    dfm_2@Dimnames$features == "multiple_baseline" ~ "multiple baseline",
-    dfm_2@Dimnames$features == "multiple_probe" ~ "multiple probe",
-    dfm_2@Dimnames$features == "multiplication_fact" ~ "multiplication fact",
-    dfm_2@Dimnames$features == "oer" ~ "OER",
-    dfm_2@Dimnames$features == "paper_pencil" ~ "paper and pencil",
-    dfm_2@Dimnames$features == "problem_solving" ~ "problem solving",
-    dfm_2@Dimnames$features == "rti" ~ "RtI",
-    dfm_2@Dimnames$features == "sbi" ~ "SBI",
-    dfm_2@Dimnames$features == "secondary_student" ~ "secondary student",
-    dfm_2@Dimnames$features == "self_monitoring" ~ "self-monitoring",
-    dfm_2@Dimnames$features == "single_case" ~ "single case",
-    dfm_2@Dimnames$features == "single_subject" ~ "single subject",
-    dfm_2@Dimnames$features == "speech_generating" ~ "speech generating", 
-    dfm_2@Dimnames$features == "stem" ~ "STEM",
-    dfm_2@Dimnames$features == "udl" ~ "UDL",
-    dfm_2@Dimnames$features == "video_modeling" ~ "video modeling",
-    dfm_2@Dimnames$features == "video_prompting" ~ "video prompting",
-    dfm_2@Dimnames$features == "virtual_abstract" ~ "virtual-abstract",
-    dfm_2@Dimnames$features == "virtual_manipulatives" ~ "virtual manipulatives",
-    dfm_2@Dimnames$features == "visual_impairment" ~ "visual impairment",
-    dfm_2@Dimnames$features == "visually_impaired" ~ "visually impaired",
-    dfm_2@Dimnames$features == "vra" ~ "VRA",
-    dfm_2@Dimnames$features == "word_problem" ~ "word problem",
-    
-    TRUE ~ as.character(dfm_2@Dimnames$features)
-)
-
-
-dfm_2_td <- tidy(dfm_2)
-
-dfm_gamma <- dfm_2_td %>%
-    left_join(y = theta_td, by = c("document" = "document"))
+```{r fig.align="center", fig.width = 6, fig.height= 5.5}
 
 word_co_by_1989 <- dfm_gamma %>%
     filter(year >=1980 & year <= 1989) %>%
@@ -605,7 +605,7 @@ network_1989
 
 
 ### 2. 1990 to 1999
-```{r fig.align="center", fig.width = 5, fig.height= 6}
+```{r fig.align="center", fig.width = 6.5, fig.height= 5.5}
 word_co_by_1999 <- dfm_gamma %>%
     filter(year >=1990 & year <= 1999) %>%
     pairwise_count(term, study_number, sort = TRUE) 
@@ -639,7 +639,7 @@ network_1999
 
 
 ### 3. 2000 to 2009
-```{r fig.align="center", fig.width = 6, fig.height= 7}
+```{r fig.align="center", fig.width = 7.5, fig.height= 8.5}
 word_co_by_2009 <- dfm_gamma %>%
     filter(year >=2000 & year <= 2009) %>%
     pairwise_count(term, study_number, sort = TRUE) 
@@ -672,7 +672,7 @@ network_2009
 
 
 ### 4. 2010 to 2021
-```{r fig.align="center", fig.width = 6, fig.height= 7.5}
+```{r fig.align="center", fig.width = 7.2, fig.height= 7}
 word_co_by_2021 <- dfm_gamma %>%
     filter(year >=2010 & year <= 2021) %>%
     pairwise_count(term, study_number, sort = TRUE) 

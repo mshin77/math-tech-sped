@@ -50,8 +50,8 @@ preprocess.all <- function(data, text_col = text_col, ...) {
         mutate(study_number = row_number()) %>% 
         ungroup()
     
-    library(readr)
-    write_csv(united_tbl, file = "data/united_tbl.csv")
+    library(openxlsx)
+    write.xlsx(united_tbl, file = "data/united_tbl.xlsx", colNames = TRUE)
     
     # Preprocess data 
     # Construct a corpus.
