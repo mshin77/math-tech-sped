@@ -60,8 +60,52 @@ paged_table(raw_tbl_period)
 
 #### Construct a document-feature matrix (dfm) from a tokens object. 
 ```{r}
+united_tbl <- raw_tbl_period %>%
+    mutate(year.c = year - 1980) %>%
+    mutate(text_col_removed = 
+               str_replace_all(abstract, 
+                               c("Abstract: " = "",
+                                 "Abstracts: " = "",
+                                 "Aim: " = "",
+                                 "Aims: " = "",
+                                 "Background: " = "",
+                                 "Conclusion: " = "",
+                                 "Conclusions: " = "",
+                                 "Design: " = "",
+                                 "Discussion: " = "",
+                                 "Effects of " = "",
+                                 "Introduction: " = "",
+                                 "Key words: " = "",
+                                 "Keywords: " = "",
+                                 "Implications for practitioners: " = "",
+                                 "Implications for Rehabilitation: " = "",
+                                 "Independent variables: " = "",
+                                 "Measures: " = "",
+                                 "Method: " = "",
+                                 "Methods: " = "",
+                                 "Methods and Procedures: " = "",
+                                 "Purpose: " = "",
+                                 "Objective: " = "",
+                                 "Objectives: " = "",
+                                 "Outcomes and Results: " = "",
+                                 "Participant: " = "",
+                                 "Participants: " = "",
+                                 "Purpose: " = "",
+                                 "Results: " = "",
+                                 "Results and Conclusions: " = "",
+                                 "Review of " = "",
+                                 "Setting: " = "",
+                                 "Study objective: " = "",
+                                 "Subjects and Methods: " = "")
+               )
+    ) %>% 
+    # Drop missing data
+    drop_na(text_col_removed) %>%
+    mutate(study_number = row_number()) %>% 
+    ungroup()
+
 source("scripts/preprocess.all.R", local = TRUE)
-toks_processed <- raw_tbl_period %>% preprocess.all(text_col = raw_tbl$abstract, verbose = FALSE)
+toks_processed <- united_tbl %>% preprocess.all(text_field = "abstract", verbose = FALSE)
 
 dfm <- dfm(toks_processed) 
 
