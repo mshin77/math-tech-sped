@@ -29,6 +29,7 @@ suppressPackageStartupMessages({
     library(readxl)
     library(tidytext)
     library(quanteda.textstats)
+    library(textminingR)
     library(stm)
     library(psych)
     library(reshape2)
@@ -105,7 +106,7 @@ united_tbl <- raw_tbl_period %>%
     ungroup()
 
 source("scripts/preprocess.all.R", local = TRUE)
-toks_processed <- united_tbl %>% preprocess.all(text_field = "abstract", verbose = FALSE)
+toks_processed <- united_tbl %>% preprocess_texts(text_field = "abstract", verbose = FALSE)
 
 dfm <- dfm(toks_processed) 
 
