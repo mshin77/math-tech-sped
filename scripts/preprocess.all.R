@@ -22,6 +22,7 @@ preprocess.all <- function(data, text_field = "united_texts", ...) {
         remove_separators = TRUE,
         split_hyphens = TRUE,
         split_tags = TRUE,
+        # remove_hyphens = TRUE,
         include_docvars = TRUE,
         padding = FALSE,
         verbose = TRUE) 

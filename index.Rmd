@@ -105,8 +105,9 @@ united_tbl <- raw_tbl_period %>%
     mutate(study_number = row_number()) %>% 
     ungroup()
 
-source("scripts/preprocess.all.R", local = TRUE)
-toks_processed <- united_tbl %>% preprocess_texts(text_field = "abstract", verbose = FALSE)
+load(file = "scripts/preprocess.all.RData")
+toks_processed <- united_tbl %>% preprocess.all(text_field = "abstract", verbose = FALSE)
+
 
 dfm <- dfm(toks_processed) 
 
