@@ -1,5 +1,5 @@
 ---
-title: "Word Networks and Topic Modeling of Research on Technology Use for Teaching Mathematics to Students With Disabilities"
+title: "A content analysis of research on technology use for teaching mathematics to students with disabilities: Word networks and topic modeling"
 date: "`r Sys.Date()`"
 output:
   rmdformats::html_clean:
@@ -145,6 +145,8 @@ dfm_2
 
 
 ## Structural topic modeling {.tabset}
+
+Given a vector of document covariates $X_d$, the topic proportion per document is defined as follows: $$\theta_{d, k}= \frac{\exp \left(\eta_{d, k}\right)}{\sum_{k=1}^K \exp \left(\eta_{d, k}\right)} \text {,} $$ where $\eta_d \sim \operatorname{Normal}\left(\mu_d=X_d \gamma, \Sigma\right);$ $\gamma$ is a coefficient matrix for the topic prevalence model, and $\Sigma$ is a covariance matrix (Roberts et al., 2016). The document-specific distribution over words is proportional to the combination of the baseline word frequency $(m)$ and the sparse topic-specific deviation from the baseline $(K_k)$ in the logarithmic space (Roberts et al., 2016): $$\beta_{d,k,y }=\frac{\exp \left(m_v+K_{k, v}\right)}{\sum_{k=1}^K \exp \left(m_v+K_{k, v}\right)} \text {,} $$ where $m$ and $K_k$ are vectors whose length is the number of distinct elements of vocabulary used in the current text mining, $v \in\{1, \ldots, 4,510\}$. 
 
 ### 1. Modeling
 ```{r fig.align="center", fig.width=50, fig.height=20}
