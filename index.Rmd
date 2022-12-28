@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
     warning = FALSE)
 ```
 
-This webpage contains R codes used for Authors (2022). The data and materials are available through an online data repository at [https://osf.io/abwz9/?view_only=2e22d4eae058456a8f169f911c0fe353](https://osf.io/abwz9/?view_only=2e22d4eae058456a8f169f911c0fe353). 
+This webpage contains R codes used for Authors (2022). The data and materials were posted through an online data repository at [https://osf.io/abwz9/?view_only=2e22d4eae058456a8f169f911c0fe353](https://osf.io/abwz9/?view_only=2e22d4eae058456a8f169f911c0fe353). 
 
 ## Import {.tabset}
 
