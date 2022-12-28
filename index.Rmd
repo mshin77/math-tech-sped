@@ -755,7 +755,7 @@ network_2021
 
 ## Total number of publications {.tabset}
 
-```{r fig.align="center", fig.width = 7, fig.height= 4}
+```{r fig.align="center", fig.width = 7.2, fig.height= 4}
 
 #### Number of publications over time
 
@@ -775,7 +775,7 @@ plot_year_doc_counts <- year_doc_counts_all %>%
         axis.title.y = element_text(margin = margin(r = 10), color = "#3B3B3B")) +
     labs(x = "Year", y = "Number of publications")
 
-plot_year_doc_counts %>% ggplotly()
+plot_year_doc_counts 
 ```
 
 
