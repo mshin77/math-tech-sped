@@ -755,7 +755,7 @@ network_2021
 
 ## Total number of publications {.tabset}
 
-```{r fig.align="center", fig.width = 8, fig.height= 4}
+```{r fig.align="center", fig.width = 7, fig.height= 4}
 
 #### Number of publications over time
 
