@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
     warning = FALSE)
 ```
 
-This webpage contains R codes used for Shin, Ok, Choo, Hossain, Bryant, and Kang (in press). Data and scripts used for text preprocessing were posted through an online data repository at [https://osf.io/8cnyw](https://osf.io/8cnyw/?view_only=74bfceb2ce37409ca3487606c3fd95e5). 
+This webpage contains R codes used for Shin, Ok, Choo, Hossain, Bryant, and Kang (in press). Data and scripts used for text preprocessing were posted through an online data repository at [https://osf.io/8cnyw](https://osf.io/8cnyw). 
 
 
 ## Import {.tabset}
