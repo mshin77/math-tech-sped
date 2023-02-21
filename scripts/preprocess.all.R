@@ -33,7 +33,7 @@ preprocess.all <- function(data, text_field = "united_texts", ...) {
     
     
     # Load the customized dictionary 1 (compound words).
-    source("../scripts/dictionary_list_1.R", local = TRUE)
+    source("scripts/dictionary_list_1.R", local = TRUE)
     
     toks_lower_comp <- toks_lower %>% 
         tokens_lookup(dictionary = dictionary(dictionary_list_1),
@@ -43,7 +43,7 @@ preprocess.all <- function(data, text_field = "united_texts", ...) {
                       capkeys = FALSE)
     
     # Load the customized dictionary 2.
-    source("../scripts/dictionary_list_2.R", local = TRUE)
+    source("scripts/dictionary_list_2.R", local = TRUE)
     
     toks_lower_comp_dict <- toks_lower_comp %>% 
         tokens_lookup(dictionary = dictionary(dictionary_list_2),
