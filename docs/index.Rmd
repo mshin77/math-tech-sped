@@ -1,5 +1,5 @@
 ---
-title: "A content analysis of research on technology use for teaching mathematics to students with disabilities: Word networks and topic modeling"
+title: ""
 date: "`r Sys.Date()`"
 output:
   rmdformats::html_clean:
@@ -18,7 +18,10 @@ knitr::opts_chunk$set(
     warning = FALSE)
 ```
 
-This webpage contains R codes used for Shin, Ok, Choo, Hossain, Bryant, and Kang (in press). Data and scripts used for text preprocessing were posted through an online data repository at [https://osf.io/8cnyw](https://osf.io/8cnyw). 
+This webpage contains R codes used for Shin et al. (in press). Data and scripts used for text preprocessing were also posted through an online data repository at [https://osf.io/8cnyw](https://osf.io/8cnyw). 
+
+Citation: Shin, M., Ok, M. W., Choo, S., Hossain, G., Bryant, D. P., & Kang, E. (in press). A content analysis of research on technology use for teaching mathematics to students with disabilities: Word networks and topic modeling. *International Journal of STEM Education*.
+
 
 
 ## Import {.tabset}
