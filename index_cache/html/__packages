@@ -8,6 +8,7 @@ purrr
 dplyr
 stringr
 forcats
+lubridate
 tidytext
 quanteda.textstats
 textminingR
@@ -22,4 +23,3 @@ tidygraph
 rmarkdown
 plotly
 quanteda
-lubridate
