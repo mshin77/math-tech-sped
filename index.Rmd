@@ -1,6 +1,6 @@
 ---
 title: ""
-date: "`r Sys.Date()`"
+# date: "`r Sys.Date()`"
 output:
   rmdformats::html_clean:
     code_folding: hide
